@@ -1,7 +1,6 @@
 package com.softwaretesting.testing.validator;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -27,13 +26,11 @@ public class PhoneNumberValidatorTest {
 
     // valid test cases
     @Test
-    @Disabled
     public void validNumberMinLengthTest() {
         assertTrue(phoneNumberValidator.validate("+4912345"));
     }
 
     @Test
-    @Disabled
     public void validNumberMaxLengthTest() {
         assertTrue(phoneNumberValidator.validate("+491234567890123"));
     }
@@ -45,27 +42,22 @@ public class PhoneNumberValidatorTest {
     }
 
     @Test
-    @Disabled
     public void invalidNumberCountryCodeStartingWithZeroTest() {
         assertFalse(phoneNumberValidator.validate("+049123456789"));
     }
 
     @Test
-    @Disabled
     public void invalidNumberTooShort() {
         assertFalse(phoneNumberValidator.validate("+49170"));
     }
 
     @Test
-    @Disabled
     public void invalidNumberTooLong() {
         assertFalse(phoneNumberValidator.validate("+4917012345678901"));
     }
 
     @Test
-    @Disabled
     public void invalidNumberIllegalSymbols() {
         assertFalse(phoneNumberValidator.validate("+49123AB456789"));
     }
-
 }
