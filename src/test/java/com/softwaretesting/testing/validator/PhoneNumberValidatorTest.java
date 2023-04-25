@@ -3,8 +3,7 @@ package com.softwaretesting.testing.validator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PhoneNumberValidatorTest {
     /*
@@ -23,7 +22,6 @@ public class PhoneNumberValidatorTest {
         phoneNumberValidator = new PhoneNumberValidator();
     }
 
-
     // valid test cases
     @Test
     public void validNumberMinLengthTest() {
@@ -36,6 +34,15 @@ public class PhoneNumberValidatorTest {
     }
 
     // invalid test cases
+    @Test
+    public void invalidNumberNull() {
+        final String expectedMessage = "Number must not be null";
+
+        final IllegalArgumentException exception =
+                assertThrows(IllegalArgumentException.class, () -> phoneNumberValidator.validate(null));
+        assertEquals(expectedMessage, exception.getMessage());
+    }
+
     @Test
     public void invalidNumberEmpty() {
         assertFalse(phoneNumberValidator.validate(""));
