@@ -25,4 +25,4 @@ deploy_reports:
     - echo "TODO"
   artifacts:
     paths:
-      - *
+      - .
