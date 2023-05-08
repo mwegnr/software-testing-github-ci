@@ -17,9 +17,12 @@ test:
     - mvn test
   artifacts:
     paths:
-      - target
+      - target/site/
 
 deploy_reports:
   stage: deploy_reports
   script:
     - echo "TODO"
+  artifacts:
+    paths:
+      - /
