@@ -22,7 +22,8 @@ test:
 deploy_reports:
   stage: deploy_reports
   script:
-    - echo "TODO"
+    - mkdir -p public/jacoco
+    - mv target/site public/jacoco
   artifacts:
     paths:
       - .
