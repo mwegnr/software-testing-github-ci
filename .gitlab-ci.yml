@@ -21,9 +21,11 @@ test:
 
 deploy_reports:
   stage: deploy_reports
+  dependencies:
+    - test
   script:
     - mkdir -p public/jacoco
-    - mv target/site public/jacoco
+    - mv target/site/jacoco public/
   artifacts:
     paths:
-      - .
+      - public
