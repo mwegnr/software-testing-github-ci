@@ -13,7 +13,7 @@ build:
 
 test:
   stage: test
-  coverage: '\d+.\d+ \% covered'
+  coverage: '/\d+.\d+ \% covered/'
   script:
     - mvn clean
     - mvn org.jacoco:jacoco-maven-plugin:prepare-agent test jacoco:report
