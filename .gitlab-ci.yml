@@ -16,7 +16,8 @@ test:
     - mvn clean
     - mvn test
   artifacts:
-    - target
+    paths:
+      - target
 
 deploy_reports:
   stage: deploy_reports
