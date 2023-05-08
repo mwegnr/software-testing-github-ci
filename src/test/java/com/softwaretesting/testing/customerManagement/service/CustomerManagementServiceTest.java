@@ -7,6 +7,7 @@ import com.softwaretesting.testing.model.Customer;
 import com.softwaretesting.testing.validator.CustomerValidator;
 import net.datafaker.Faker;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -15,10 +16,11 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Collection;
 import java.util.Optional;
+import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class CustomerManagementServiceTest {
@@ -46,8 +48,6 @@ class CustomerManagementServiceTest {
         MockitoAnnotations.initMocks(this);
     }
 
-
-//    TODO: test list() and saveAll()
 
     @Test
     @DisplayName("Searching successfully for a customer by ID")
@@ -117,7 +117,7 @@ class CustomerManagementServiceTest {
 
         assertEquals(expectedMessage, exception.getMessage());
         verify(customerRepository, times(1)).findByUserName(expectedCustomer.getUserName());
-        verify(customerValidator, times(1)).validate404(Optional.empty(),"User-Name", expectedCustomer.getUserName());
+        verify(customerValidator, times(1)).validate404(Optional.empty(), "User-Name", expectedCustomer.getUserName());
     }
 
     @Test
@@ -210,4 +210,26 @@ class CustomerManagementServiceTest {
         verify(customerRepository, times(1)).selectCustomerByPhoneNumber(newCustomer.getPhoneNumber());
         verify(customerRepository, times(0)).save(newCustomer);
     }
+
+    @Test
+    @DisplayName("List all customers")
+    public void listAllCustomersTest() {
+        final Collection<Customer> expectedCustomerCollection = Set.of(getSampleCustomer(), getSampleCustomer(), getSampleCustomer());
+
+        when(customerRepository.findAll()).thenReturn(expectedCustomerCollection);
+
+        final Collection<Customer> actualCustomers = customerManagementService.list();
+
+        assertTrue(actualCustomers.containsAll(expectedCustomerCollection));
+        assertTrue(expectedCustomerCollection.containsAll(actualCustomers));
+        verify(customerRepository, times(1)).findAll();
+    }
+
+    @Test
+    @DisplayName("Save multiple new customers")
+    @Disabled
+    public void saveListOfCustomers() {
+        fail(); // TODO
+    }
+
 }
