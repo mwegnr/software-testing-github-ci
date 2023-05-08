@@ -3,6 +3,7 @@ image: maven:3.9.1-eclipse-temurin-17-alpine
 stages:
   - build
   - test
+  - visualize
   - deploy_reports
 
 build:
@@ -14,12 +15,26 @@ test:
   stage: test
   script:
     - mvn clean
-    - mvn test
+    - mvn org.jacoco:jacoco-maven-plugin:prepare-agent test jacoco:report
     - mvn test-compile org.pitest:pitest-maven:mutationCoverage
   artifacts:
     paths:
       - target/site/
       - target/pit-reports
+
+coverage:
+  stage: visualize
+  image: registry.gitlab.com/haynes/jacoco2cobertura:1.0.9
+  dependencies:
+    - test
+  script:
+    # convert report from jacoco to cobertura, using relative project path
+    - python /opt/cover2cover.py target/site/jacoco/jacoco.xml $CI_PROJECT_DIR/src/main/java/ > target/site/cobertura.xml
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: target/site/cobertura.xml
 
 pages:
   stage: deploy_reports
