@@ -7,7 +7,6 @@ import com.softwaretesting.testing.model.Customer;
 import com.softwaretesting.testing.validator.CustomerValidator;
 import net.datafaker.Faker;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -16,9 +15,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Collection;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -227,9 +224,16 @@ class CustomerManagementServiceTest {
 
     @Test
     @DisplayName("Save multiple new customers")
-    @Disabled
     public void saveListOfCustomers() {
-        fail(); // TODO
+        final List<Customer> expectedCustomers = Arrays.asList(getSampleCustomer(), getSampleCustomer(), getSampleCustomer());
+
+        when(customerRepository.saveAll(expectedCustomers)).thenReturn(expectedCustomers);
+
+        final Collection<Customer> actualCustomers = customerManagementService.saveAll(expectedCustomers);
+
+        assertTrue(actualCustomers.containsAll(expectedCustomers));
+        assertTrue(expectedCustomers.containsAll(actualCustomers));
+        verify(customerRepository, times(1)).saveAll(expectedCustomers);
     }
 
 }
