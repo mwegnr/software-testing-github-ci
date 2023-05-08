@@ -15,9 +15,11 @@ test:
   script:
     - mvn clean
     - mvn test
+    - mvn test-compile org.pitest:pitest-maven:mutationCoverage
   artifacts:
     paths:
       - target/site/
+      - target/pit-reports
 
 pages:
   stage: deploy_reports
@@ -26,6 +28,7 @@ pages:
   script:
     - mkdir -p public/jacoco
     - mv target/site/jacoco public/
+    - mv target/pit-reports public/
   artifacts:
     paths:
       - public
