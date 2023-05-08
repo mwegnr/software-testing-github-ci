@@ -19,7 +19,7 @@ test:
     paths:
       - target/site/
 
-deploy_reports:
+pages:
   stage: deploy_reports
   dependencies:
     - test
