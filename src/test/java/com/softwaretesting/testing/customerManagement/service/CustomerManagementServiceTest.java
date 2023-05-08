@@ -6,6 +6,7 @@ import com.softwaretesting.testing.exception.CustomerNotFoundException;
 import com.softwaretesting.testing.model.Customer;
 import com.softwaretesting.testing.validator.CustomerValidator;
 import net.datafaker.Faker;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+
 class CustomerManagementServiceTest {
     @Mock
     private CustomerRepository customerRepository;
@@ -29,6 +31,8 @@ class CustomerManagementServiceTest {
 
     @InjectMocks
     private CustomerManagementServiceImp customerManagementService;
+
+    private AutoCloseable closeable;
 
     final Faker dataFaker = new Faker();
 
@@ -42,9 +46,14 @@ class CustomerManagementServiceTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.initMocks(this);
+        // replacement for MockitoAnnotations.initMocks(this) which is deprecated
+        closeable = MockitoAnnotations.openMocks(this);
     }
 
+    @AfterEach
+    void tearDown() throws Exception {
+        closeable.close();
+    }
 
     @Test
     @DisplayName("Searching successfully for a customer by ID")
