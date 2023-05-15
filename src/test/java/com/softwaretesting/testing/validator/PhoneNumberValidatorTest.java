@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PhoneNumberValidatorTest {
+class PhoneNumberValidatorTest {
     /*
      * Phone Number Constraints according to E.164
      *   - Country Code: "+" + 1-3 digits, cannot start with 0
@@ -24,18 +24,18 @@ public class PhoneNumberValidatorTest {
 
     // valid test cases
     @Test
-    public void validNumberMinLengthTest() {
+    void validNumberMinLengthTest() {
         assertTrue(phoneNumberValidator.validate("+4912345"));
     }
 
     @Test
-    public void validNumberMaxLengthTest() {
+    void validNumberMaxLengthTest() {
         assertTrue(phoneNumberValidator.validate("+491234567890123"));
     }
 
     // invalid test cases
     @Test
-    public void invalidNumberNull() {
+    void invalidNumberNull() {
         final String expectedMessage = "Number must not be null";
 
         final IllegalArgumentException exception =
@@ -44,27 +44,27 @@ public class PhoneNumberValidatorTest {
     }
 
     @Test
-    public void invalidNumberEmpty() {
+    void invalidNumberEmpty() {
         assertFalse(phoneNumberValidator.validate(""));
     }
 
     @Test
-    public void invalidNumberCountryCodeStartingWithZeroTest() {
+    void invalidNumberCountryCodeStartingWithZeroTest() {
         assertFalse(phoneNumberValidator.validate("+049123456789"));
     }
 
     @Test
-    public void invalidNumberTooShort() {
+    void invalidNumberTooShort() {
         assertFalse(phoneNumberValidator.validate("+49170"));
     }
 
     @Test
-    public void invalidNumberTooLong() {
+    void invalidNumberTooLong() {
         assertFalse(phoneNumberValidator.validate("+4917012345678901"));
     }
 
     @Test
-    public void invalidNumberIllegalSymbols() {
+    void invalidNumberIllegalSymbols() {
         assertFalse(phoneNumberValidator.validate("+49123AB456789"));
     }
 }

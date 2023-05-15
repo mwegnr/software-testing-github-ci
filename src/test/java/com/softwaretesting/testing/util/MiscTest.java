@@ -35,16 +35,15 @@ class MiscTest {
         assertEquals(expectedMessage, exception.getMessage());
     }
 
+    /* usually we would also test for handling of unsupported colors,
+     * unfortunately this is not possible as all Misc.Color values are supported,
+     * and it's therefore not possible to obtain an unsupported color
+     */
     @Test
     void supportedColorTest() {
         assertTrue(Misc.isColorSupported(Misc.Color.RED));
         assertTrue(Misc.isColorSupported(Misc.Color.YELLOW));
         assertTrue(Misc.isColorSupported(Misc.Color.BLUE));
-    }
-
-    @Test
-    void unsupportedColorTest() {
-        // don't think the `false` return is reachable, since the enum only allows supported colors
     }
 
     @Test

@@ -58,7 +58,7 @@ class CustomerRegistrationServiceTest {
 
     @Test
     @DisplayName("Inserting a new, valid customer")
-    public void registerValidCustomerTest() {
+    void registerValidCustomerTest() {
         final Customer testCustomer = getSampleCustomer();
         when(customerRepository.selectCustomerByPhoneNumber(testCustomer.getPhoneNumber())).thenReturn(Optional.empty());
         when(customerRepository.save(testCustomer)).thenReturn(testCustomer);
@@ -72,7 +72,7 @@ class CustomerRegistrationServiceTest {
 
     @Test
     @DisplayName("Inserting an already existing customer, should throw Exception")
-    public void insertAlreadyExistingCustomerExpectingExceptionTest() {
+    void insertAlreadyExistingCustomerExpectingExceptionTest() {
         final Customer testCustomer = getSampleCustomer();
         final String expectedMessage = "You are already registered";
 
@@ -88,7 +88,7 @@ class CustomerRegistrationServiceTest {
 
     @Test
     @DisplayName("Inserting a new customer, but one with the same number already exists, should throw Exception")
-    public void insertCustomerWithAlreadyTakenPhoneNumberExpectingException() {
+    void insertCustomerWithAlreadyTakenPhoneNumberExpectingException() {
         final Customer existingCustomer = getSampleCustomer();
         final Customer newCustomer = getSampleCustomer();
         final String expectedMessage = "Phone Number " + newCustomer.getPhoneNumber() + " taken";
@@ -101,6 +101,4 @@ class CustomerRegistrationServiceTest {
         assertEquals(newCustomer.getPhoneNumber(), phoneNumberCaptor.getValue());
         assertEquals(expectedMessage, exception.getMessage());
     }
-
-
 }

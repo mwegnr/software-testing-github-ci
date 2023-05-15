@@ -70,7 +70,7 @@ class CustomerManagementServiceTest {
 
     @Test
     @DisplayName("Searching successfully for a customer by ID")
-    public void findValidCustomerByIdTest() {
+    void findValidCustomerByIdTest() {
         final Customer expectedCustomer = getSampleCustomer();
         when(customerRepository.findById(expectedCustomer.getId())).thenReturn(Optional.of(expectedCustomer));
 
@@ -85,32 +85,31 @@ class CustomerManagementServiceTest {
 
     @Test
     @DisplayName("Searching for a non-existent customer by ID and expecting exception")
-    public void findMissingCustomerByIdTest() {
-        final Customer expectedCustomer = getSampleCustomer();
-        final String expectedMessage = "404 NOT_FOUND \"java.util.Optional with [Id]'[" + expectedCustomer.getId() + "]' does not exist.\"";
+    void findMissingCustomerByIdTest() {
+        final Long idOfCustomerToDelete = getSampleCustomer().getId();
+        final String expectedMessage = "404 NOT_FOUND \"java.util.Optional with [Id]'[" + idOfCustomerToDelete + "]' does not exist.\"";
 
-        when(customerRepository.findById(expectedCustomer.getId()))
+        when(customerRepository.findById(idOfCustomerToDelete))
                 .thenReturn(Optional.empty());
 
         doThrow(new ResponseStatusException(HttpStatus.NOT_FOUND,
-                "java.util.Optional with [Id]'[" + expectedCustomer.getId() + "]' does not exist."))
+                "java.util.Optional with [Id]'[" + idOfCustomerToDelete + "]' does not exist."))
                 .when(customerValidator)
                 .validate404(any(), anyString(), anyString());
 
 
-        final Exception exception = assertThrows(ResponseStatusException.class,
-                () -> customerManagementService.findById(expectedCustomer.getId()));
+        final Exception exception = assertThrows(ResponseStatusException.class, () -> customerManagementService.findById(idOfCustomerToDelete));
         then(customerRepository).should().findById(idCaptor.capture());
 
         assertEquals(expectedMessage, exception.getMessage());
-        assertEquals(expectedCustomer.getId(), idCaptor.getValue());
-        verify(customerRepository, times(1)).findById(expectedCustomer.getId());
-        verify(customerValidator, times(1)).validate404(Optional.empty(), "id", String.valueOf(expectedCustomer.getId()));
+        assertEquals(idOfCustomerToDelete, idCaptor.getValue());
+        verify(customerRepository, times(1)).findById(idOfCustomerToDelete);
+        verify(customerValidator, times(1)).validate404(Optional.empty(), "id", String.valueOf(idOfCustomerToDelete));
     }
 
     @Test
     @DisplayName("Searching successfully for a customer by username")
-    public void findValidCustomerByUserNameTest() {
+    void findValidCustomerByUserNameTest() {
         final Customer expectedCustomer = getSampleCustomer();
         when(customerRepository.findByUserName(expectedCustomer.getUserName())).thenReturn(Optional.of(expectedCustomer));
 
@@ -125,32 +124,31 @@ class CustomerManagementServiceTest {
 
     @Test
     @DisplayName("Searching for a non-existent customer by username and expecting exception")
-    public void findMissingCustomerByUserNameTest() {
-        final Customer expectedCustomer = getSampleCustomer();
-        final String expectedMessage = "404 NOT_FOUND \"java.util.Optional with [UserName]'[" + expectedCustomer.getUserName() + "]' does not exist.\"";
+    void findMissingCustomerByUserNameTest() {
+        final String expectedUserName = getSampleCustomer().getUserName();
+        final String expectedMessage = "404 NOT_FOUND \"java.util.Optional with [UserName]'[" + expectedUserName + "]' does not exist.\"";
 
-        when(customerRepository.findByUserName(expectedCustomer.getUserName()))
+        when(customerRepository.findByUserName(expectedUserName))
                 .thenReturn(Optional.empty());
 
         doThrow(new ResponseStatusException(HttpStatus.NOT_FOUND,
-                "java.util.Optional with [UserName]'[" + expectedCustomer.getUserName() + "]' does not exist."))
+                "java.util.Optional with [UserName]'[" + expectedUserName + "]' does not exist."))
                 .when(customerValidator)
                 .validate404(any(), anyString(), anyString());
 
-        final Exception exception = assertThrows(ResponseStatusException.class,
-                () -> customerManagementService.findByUserName(expectedCustomer.getUserName()));
+        final Exception exception = assertThrows(ResponseStatusException.class, () -> customerManagementService.findByUserName(expectedUserName));
         then(customerRepository).should().findByUserName(userNameCaptor.capture());
 
 
         assertEquals(expectedMessage, exception.getMessage());
-        assertEquals(expectedCustomer.getUserName(), userNameCaptor.getValue());
-        verify(customerRepository, times(1)).findByUserName(expectedCustomer.getUserName());
-        verify(customerValidator, times(1)).validate404(Optional.empty(), "User-Name", expectedCustomer.getUserName());
+        assertEquals(expectedUserName, userNameCaptor.getValue());
+        verify(customerRepository, times(1)).findByUserName(expectedUserName);
+        verify(customerValidator, times(1)).validate404(Optional.empty(), "User-Name", expectedUserName);
     }
 
     @Test
     @DisplayName("Searching successfully for a customer by phone number")
-    public void findValidCustomerByPhoneNumberTest() {
+    void findValidCustomerByPhoneNumberTest() {
         final Customer expectedCustomer = getSampleCustomer();
         when(customerRepository.selectCustomerByPhoneNumber(expectedCustomer.getPhoneNumber())).thenReturn(Optional.of(expectedCustomer));
 
@@ -165,63 +163,63 @@ class CustomerManagementServiceTest {
 
     @Test
     @DisplayName("Searching for a non-existent customer by phone number and expecting exception")
-    public void searchMissingCustomerByPhoneNumberTest() {
-        final Customer expectedCustomer = getSampleCustomer();
-        final String expectedMessage = "404 NOT_FOUND \"java.util.Optional with [PhoneNumber]'[" + expectedCustomer.getPhoneNumber() + "]' does not exist.\"";
+    void searchMissingCustomerByPhoneNumberTest() {
+        final String expectedPhoneNumber = getSampleCustomer().getPhoneNumber();
+        final String expectedMessage = "404 NOT_FOUND \"java.util.Optional with [PhoneNumber]'[" + expectedPhoneNumber + "]' does not exist.\"";
 
-        when(customerRepository.selectCustomerByPhoneNumber(expectedCustomer.getPhoneNumber()))
+        when(customerRepository.selectCustomerByPhoneNumber(expectedPhoneNumber))
                 .thenReturn(Optional.empty());
 
         doThrow(new ResponseStatusException(HttpStatus.NOT_FOUND,
-                "java.util.Optional with [PhoneNumber]'[" + expectedCustomer.getPhoneNumber() + "]' does not exist."))
+                "java.util.Optional with [PhoneNumber]'[" + expectedPhoneNumber + "]' does not exist."))
                 .when(customerValidator)
                 .validate404(any(), anyString(), anyString());
 
         final Exception exception = assertThrows(ResponseStatusException.class,
-                () -> customerManagementService.selectCustomerByPhoneNumber(expectedCustomer.getPhoneNumber()));
+                () -> customerManagementService.selectCustomerByPhoneNumber(expectedPhoneNumber));
         then(customerRepository).should().selectCustomerByPhoneNumber(phoneNumberCaptor.capture());
 
         assertEquals(expectedMessage, exception.getMessage());
-        assertEquals(expectedCustomer.getPhoneNumber(), phoneNumberCaptor.getValue());
-        verify(customerRepository, times(1)).selectCustomerByPhoneNumber(expectedCustomer.getPhoneNumber());
-        verify(customerValidator, times(1)).validate404(Optional.empty(), "phone number", expectedCustomer.getPhoneNumber());
+        assertEquals(expectedPhoneNumber, phoneNumberCaptor.getValue());
+        verify(customerRepository, times(1)).selectCustomerByPhoneNumber(expectedPhoneNumber);
+        verify(customerValidator, times(1)).validate404(Optional.empty(), "phone number", expectedPhoneNumber);
     }
 
     @Test
     @DisplayName("Successfully delete existing customer")
-    public void deleteExistingCustomerTest() {
-        final Customer customerToDelete = getSampleCustomer();
+    void deleteExistingCustomerTest() {
+        final Long idOfCustomerToDelete = getSampleCustomer().getId();
 
-        when(customerRepository.existsById(customerToDelete.getId())).thenReturn(true);
+        when(customerRepository.existsById(idOfCustomerToDelete)).thenReturn(true);
 
-        customerManagementService.delete(customerToDelete.getId());
+        customerManagementService.delete(idOfCustomerToDelete);
         then(customerRepository).should().existsById(idCaptor.capture());
 
-        assertEquals(customerToDelete.getId(), idCaptor.getValue());
-        verify(customerRepository, times(1)).existsById(customerToDelete.getId());
-        verify(customerRepository, times(1)).deleteById(customerToDelete.getId());
+        assertEquals(idOfCustomerToDelete, idCaptor.getValue());
+        verify(customerRepository, times(1)).existsById(idOfCustomerToDelete);
+        verify(customerRepository, times(1)).deleteById(idOfCustomerToDelete);
     }
 
     @Test
     @DisplayName("Try unsuccessfully to delete non-existent customer")
-    public void deleteMissingCustomerTest() {
-        final Customer customerToDelete = getSampleCustomer();
-        final String expectedMessage = "Customer with id " + customerToDelete.getId() + " does not exists";
+    void deleteMissingCustomerTest() {
+        final Long idOfCustomerToDelete = getSampleCustomer().getId();
+        final String expectedMessage = "Customer with id " + idOfCustomerToDelete + " does not exists";
 
-        when(customerRepository.existsById(customerToDelete.getId())).thenReturn(false);
+        when(customerRepository.existsById(idOfCustomerToDelete)).thenReturn(false);
 
-        final Exception exception = assertThrows(CustomerNotFoundException.class, () -> customerManagementService.delete(customerToDelete.getId()));
+        final Exception exception = assertThrows(CustomerNotFoundException.class, () -> customerManagementService.delete(idOfCustomerToDelete));
         then(customerRepository).should().existsById(idCaptor.capture());
 
         assertEquals(expectedMessage, exception.getMessage());
-        assertEquals(customerToDelete.getId(), idCaptor.getValue());
-        verify(customerRepository, times(1)).existsById(customerToDelete.getId());
-        verify(customerRepository, times(0)).deleteById(customerToDelete.getId());
+        assertEquals(idOfCustomerToDelete, idCaptor.getValue());
+        verify(customerRepository, times(1)).existsById(idOfCustomerToDelete);
+        verify(customerRepository, times(0)).deleteById(idOfCustomerToDelete);
     }
 
     @Test
     @DisplayName("Successfully add new customer")
-    public void addNewCustomerTest() {
+    void addNewCustomerTest() {
         final Customer newCustomer = getSampleCustomer();
 
         when(customerRepository.selectCustomerByPhoneNumber(newCustomer.getPhoneNumber()))
@@ -241,7 +239,7 @@ class CustomerManagementServiceTest {
 
     @Test
     @DisplayName("Try to unsuccessfully add a new customer with a taken phone number")
-    public void addNewCustomerWithExistingNumberTest() {
+    void addNewCustomerWithExistingNumberTest() {
         final Customer newCustomer = getSampleCustomer();
         final String expectedMessage = "Phone Number " + newCustomer.getPhoneNumber() + " taken";
 
@@ -260,7 +258,7 @@ class CustomerManagementServiceTest {
 
     @Test
     @DisplayName("List all customers")
-    public void listAllCustomersTest() {
+    void listAllCustomersTest() {
         final Collection<Customer> expectedCustomerCollection = Set.of(getSampleCustomer(), getSampleCustomer(), getSampleCustomer());
 
         when(customerRepository.findAll()).thenReturn(expectedCustomerCollection);
@@ -274,7 +272,7 @@ class CustomerManagementServiceTest {
 
     @Test
     @DisplayName("Save multiple new customers")
-    public void saveListOfCustomers() {
+    void saveListOfCustomers() {
         final List<Customer> expectedCustomers = Arrays.asList(getSampleCustomer(), getSampleCustomer(), getSampleCustomer());
 
         when(customerRepository.saveAll(expectedCustomers)).thenReturn(expectedCustomers);
@@ -287,5 +285,4 @@ class CustomerManagementServiceTest {
         assertEquals(expectedCustomers, customerListCaptor.getValue());
         verify(customerRepository, times(1)).saveAll(expectedCustomers);
     }
-
 }

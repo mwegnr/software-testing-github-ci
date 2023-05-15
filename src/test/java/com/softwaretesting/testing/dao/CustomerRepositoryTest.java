@@ -56,7 +56,7 @@ class CustomerRepositoryTest {
      * - CrudRepository.findById(Long)
      */
     @Test
-    public void addCustomerAndFindById() {
+    void addCustomerAndFindById() {
         final Customer insertedCustomer = customerRepository.save(getSampleCustomer());
         final Optional<Customer> customerById = customerRepository.findById(insertedCustomer.getId());
 
@@ -71,7 +71,7 @@ class CustomerRepositoryTest {
      * - CrudRepository.deleteById(Long)
      */
     @Test
-    public void addCustomerCheckExistenceAndDeleteById() {
+    void addCustomerCheckExistenceAndDeleteById() {
         final Customer insertedCustomer = customerRepository.save(getSampleCustomer());
 
         assertTrue(customerRepository.existsById(insertedCustomer.getId()));
@@ -86,7 +86,7 @@ class CustomerRepositoryTest {
      * - CustomerRepository.findByUserName(String)
      */
     @Test
-    public void addCustomerAndFindByName() {
+    void addCustomerAndFindByName() {
         final String userName = dataFaker.name().username();
         final Customer customerWithUserName = getSampleCustomer();
         customerWithUserName.setUserName(userName);
@@ -104,7 +104,7 @@ class CustomerRepositoryTest {
      * - CustomerRepository.selectCustomerByPhoneNumber(String)
      */
     @Test
-    public void addCustomerAndFindByPhoneNumber() {
+    void addCustomerAndFindByPhoneNumber() {
         final String phoneNumber = dataFaker.phoneNumber().phoneNumber();
         final Customer customerWithPhoneNumber = getSampleCustomer();
         customerWithPhoneNumber.setPhoneNumber(phoneNumber);
@@ -124,7 +124,7 @@ class CustomerRepositoryTest {
      * - CrudRepository.count()
      */
     @Test
-    public void addListOfCustomersFindAndDeleteByIdList() {
+    void addListOfCustomersFindAndDeleteByIdList() {
         final List<Customer> customerList = List.of(getSampleCustomer(), getSampleCustomer(), getSampleCustomer());
         final Iterable<Customer> insertedCustomerList = customerRepository.saveAll(customerList);
         final List<Long> insertedIds = StreamSupport
@@ -148,7 +148,7 @@ class CustomerRepositoryTest {
      * - CrudRepository.existsById(Long)
      */
     @Test
-    public void addListOfCustomersAndDeleteOne() {
+    void addListOfCustomersAndDeleteOne() {
         final List<Customer> customerList = List.of(getSampleCustomer(), getSampleCustomer(), getSampleCustomer());
         final Iterable<Customer> insertedCustomerIterable = customerRepository.saveAll(customerList);
 
@@ -176,7 +176,7 @@ class CustomerRepositoryTest {
      * - CrudRepository.count()
      */
     @Test
-    public void addAndDeleteListOfCustomers() {
+    void addAndDeleteListOfCustomers() {
         final List<Customer> customerList = List.of(getSampleCustomer(), getSampleCustomer(), getSampleCustomer());
         final Iterable<Customer> insertedCustomerList = customerRepository.saveAll(customerList);
 
@@ -196,7 +196,7 @@ class CustomerRepositoryTest {
      * - CrudRepository.count()
      */
     @Test
-    public void addListOfCustomersAndDeleteAll() {
+    void addListOfCustomersAndDeleteAll() {
         final List<Customer> customerList = List.of(getSampleCustomer(), getSampleCustomer(), getSampleCustomer());
         final Iterable<Customer> insertedCustomerList = customerRepository.saveAll(customerList);
 
@@ -214,7 +214,7 @@ class CustomerRepositoryTest {
      * - CrudRepository.findAll()
      */
     @Test
-    public void addListOfCustomersAndCompareWithListOfAllCustomers() {
+    void addListOfCustomersAndCompareWithListOfAllCustomers() {
         final List<Customer> customerList = List.of(getSampleCustomer(), getSampleCustomer(), getSampleCustomer());
         final Iterable<Customer> insertedCustomerList = customerRepository.saveAll(customerList);
 
@@ -229,7 +229,7 @@ class CustomerRepositoryTest {
      * - CrudRepository.count()
      */
     @Test
-    public void addListOfCustomersAndCount() {
+    void addListOfCustomersAndCount() {
         final List<Customer> customerList = List.of(getSampleCustomer(), getSampleCustomer(), getSampleCustomer());
         customerRepository.saveAll(customerList);
 
