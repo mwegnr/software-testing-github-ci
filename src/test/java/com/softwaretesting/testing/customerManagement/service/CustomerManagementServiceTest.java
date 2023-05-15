@@ -10,17 +10,15 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
-
 
 class CustomerManagementServiceTest {
     @Mock
@@ -31,6 +29,21 @@ class CustomerManagementServiceTest {
 
     @InjectMocks
     private CustomerManagementServiceImp customerManagementService;
+
+    @Captor
+    private ArgumentCaptor<Long> idCaptor;
+
+    @Captor
+    private ArgumentCaptor<String> userNameCaptor;
+
+    @Captor
+    private ArgumentCaptor<String> phoneNumberCaptor;
+
+    @Captor
+    private ArgumentCaptor<Customer> customerCaptor;
+
+    @Captor
+    private ArgumentCaptor<List<Customer>> customerListCaptor;
 
     private AutoCloseable closeable;
 
@@ -62,8 +75,10 @@ class CustomerManagementServiceTest {
         when(customerRepository.findById(expectedCustomer.getId())).thenReturn(Optional.of(expectedCustomer));
 
         final Customer actualCustomer = customerManagementService.findById(expectedCustomer.getId());
+        then(customerRepository).should().findById(idCaptor.capture());
 
         assertEquals(expectedCustomer, actualCustomer);
+        assertEquals(expectedCustomer.getId(), idCaptor.getValue());
         verify(customerRepository, times(1)).findById(expectedCustomer.getId());
         verify(customerValidator, times(1)).validate404(Optional.of(expectedCustomer), "id", String.valueOf(expectedCustomer.getId()));
     }
@@ -85,8 +100,10 @@ class CustomerManagementServiceTest {
 
         final Exception exception = assertThrows(ResponseStatusException.class,
                 () -> customerManagementService.findById(expectedCustomer.getId()));
+        then(customerRepository).should().findById(idCaptor.capture());
 
         assertEquals(expectedMessage, exception.getMessage());
+        assertEquals(expectedCustomer.getId(), idCaptor.getValue());
         verify(customerRepository, times(1)).findById(expectedCustomer.getId());
         verify(customerValidator, times(1)).validate404(Optional.empty(), "id", String.valueOf(expectedCustomer.getId()));
     }
@@ -98,8 +115,10 @@ class CustomerManagementServiceTest {
         when(customerRepository.findByUserName(expectedCustomer.getUserName())).thenReturn(Optional.of(expectedCustomer));
 
         final Customer actualCustomer = customerManagementService.findByUserName(expectedCustomer.getUserName());
+        then(customerRepository).should().findByUserName(userNameCaptor.capture());
 
         assertEquals(expectedCustomer, actualCustomer);
+        assertEquals(expectedCustomer.getUserName(), userNameCaptor.getValue());
         verify(customerRepository, times(1)).findByUserName(expectedCustomer.getUserName());
         verify(customerValidator, times(1)).validate404(Optional.of(expectedCustomer), "User-Name", expectedCustomer.getUserName());
     }
@@ -120,8 +139,11 @@ class CustomerManagementServiceTest {
 
         final Exception exception = assertThrows(ResponseStatusException.class,
                 () -> customerManagementService.findByUserName(expectedCustomer.getUserName()));
+        then(customerRepository).should().findByUserName(userNameCaptor.capture());
+
 
         assertEquals(expectedMessage, exception.getMessage());
+        assertEquals(expectedCustomer.getUserName(), userNameCaptor.getValue());
         verify(customerRepository, times(1)).findByUserName(expectedCustomer.getUserName());
         verify(customerValidator, times(1)).validate404(Optional.empty(), "User-Name", expectedCustomer.getUserName());
     }
@@ -133,15 +155,17 @@ class CustomerManagementServiceTest {
         when(customerRepository.selectCustomerByPhoneNumber(expectedCustomer.getPhoneNumber())).thenReturn(Optional.of(expectedCustomer));
 
         final Customer actualCustomer = customerManagementService.selectCustomerByPhoneNumber(expectedCustomer.getPhoneNumber());
+        then(customerRepository).should().selectCustomerByPhoneNumber(phoneNumberCaptor.capture());
 
         assertEquals(expectedCustomer, actualCustomer);
+        assertEquals(expectedCustomer.getPhoneNumber(), phoneNumberCaptor.getValue());
         verify(customerRepository, times(1)).selectCustomerByPhoneNumber(expectedCustomer.getPhoneNumber());
         verify(customerValidator, times(1)).validate404(Optional.of(expectedCustomer), "phone number", expectedCustomer.getPhoneNumber());
     }
 
     @Test
     @DisplayName("Searching for a non-existent customer by phone number and expecting exception")
-    public void findMissingCustomerByPhoneNumberTest() {
+    public void searchMissingCustomerByPhoneNumberTest() {
         final Customer expectedCustomer = getSampleCustomer();
         final String expectedMessage = "404 NOT_FOUND \"java.util.Optional with [PhoneNumber]'[" + expectedCustomer.getPhoneNumber() + "]' does not exist.\"";
 
@@ -155,8 +179,10 @@ class CustomerManagementServiceTest {
 
         final Exception exception = assertThrows(ResponseStatusException.class,
                 () -> customerManagementService.selectCustomerByPhoneNumber(expectedCustomer.getPhoneNumber()));
+        then(customerRepository).should().selectCustomerByPhoneNumber(phoneNumberCaptor.capture());
 
         assertEquals(expectedMessage, exception.getMessage());
+        assertEquals(expectedCustomer.getPhoneNumber(), phoneNumberCaptor.getValue());
         verify(customerRepository, times(1)).selectCustomerByPhoneNumber(expectedCustomer.getPhoneNumber());
         verify(customerValidator, times(1)).validate404(Optional.empty(), "phone number", expectedCustomer.getPhoneNumber());
     }
@@ -169,6 +195,9 @@ class CustomerManagementServiceTest {
         when(customerRepository.existsById(customerToDelete.getId())).thenReturn(true);
 
         customerManagementService.delete(customerToDelete.getId());
+        then(customerRepository).should().existsById(idCaptor.capture());
+
+        assertEquals(customerToDelete.getId(), idCaptor.getValue());
         verify(customerRepository, times(1)).existsById(customerToDelete.getId());
         verify(customerRepository, times(1)).deleteById(customerToDelete.getId());
     }
@@ -182,7 +211,10 @@ class CustomerManagementServiceTest {
         when(customerRepository.existsById(customerToDelete.getId())).thenReturn(false);
 
         final Exception exception = assertThrows(CustomerNotFoundException.class, () -> customerManagementService.delete(customerToDelete.getId()));
+        then(customerRepository).should().existsById(idCaptor.capture());
+
         assertEquals(expectedMessage, exception.getMessage());
+        assertEquals(customerToDelete.getId(), idCaptor.getValue());
         verify(customerRepository, times(1)).existsById(customerToDelete.getId());
         verify(customerRepository, times(0)).deleteById(customerToDelete.getId());
     }
@@ -196,7 +228,13 @@ class CustomerManagementServiceTest {
                 .thenReturn(Optional.empty());
         when(customerRepository.save(newCustomer)).thenReturn(newCustomer);
 
-        assertEquals(newCustomer, customerManagementService.addCustomer(newCustomer));
+        final Customer addedCustomer = customerManagementService.addCustomer(newCustomer);
+        then(customerRepository).should().selectCustomerByPhoneNumber(phoneNumberCaptor.capture());
+        then(customerRepository).should().save(customerCaptor.capture());
+
+        assertEquals(newCustomer, addedCustomer);
+        assertEquals(newCustomer.getPhoneNumber(), phoneNumberCaptor.getValue());
+        assertEquals(newCustomer, customerCaptor.getValue());
         verify(customerRepository, times(1)).selectCustomerByPhoneNumber(newCustomer.getPhoneNumber());
         verify(customerRepository, times(1)).save(newCustomer);
     }
@@ -212,7 +250,10 @@ class CustomerManagementServiceTest {
 
 
         final Exception exception = assertThrows(BadRequestException.class, () -> customerManagementService.addCustomer(newCustomer));
+        then(customerRepository).should().selectCustomerByPhoneNumber(phoneNumberCaptor.capture());
+
         assertEquals(expectedMessage, exception.getMessage());
+        assertEquals(newCustomer.getPhoneNumber(), phoneNumberCaptor.getValue());
         verify(customerRepository, times(1)).selectCustomerByPhoneNumber(newCustomer.getPhoneNumber());
         verify(customerRepository, times(0)).save(newCustomer);
     }
@@ -239,9 +280,11 @@ class CustomerManagementServiceTest {
         when(customerRepository.saveAll(expectedCustomers)).thenReturn(expectedCustomers);
 
         final Collection<Customer> actualCustomers = customerManagementService.saveAll(expectedCustomers);
+        then(customerRepository).should().saveAll(customerListCaptor.capture());
 
         assertTrue(actualCustomers.containsAll(expectedCustomers));
         assertTrue(expectedCustomers.containsAll(actualCustomers));
+        assertEquals(expectedCustomers, customerListCaptor.getValue());
         verify(customerRepository, times(1)).saveAll(expectedCustomers);
     }
 
