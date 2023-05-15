@@ -4,17 +4,17 @@ import com.softwaretesting.testing.dao.CustomerRepository;
 import com.softwaretesting.testing.exception.BadRequestException;
 import com.softwaretesting.testing.model.Customer;
 import net.datafaker.Faker;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.when;
 
 class CustomerRegistrationServiceTest {
@@ -23,6 +23,11 @@ class CustomerRegistrationServiceTest {
 
     @InjectMocks
     private CustomerRegistrationService customerRegistrationService;
+
+    @Captor
+    private ArgumentCaptor<String> phoneNumberCaptor;
+
+    private AutoCloseable closeable;
 
     final Faker dataFaker = new Faker();
 
@@ -36,7 +41,13 @@ class CustomerRegistrationServiceTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.initMocks(this);
+        // replacement for MockitoAnnotations.initMocks(this) which is deprecated
+        closeable = MockitoAnnotations.openMocks(this);
+    }
+
+    @AfterEach
+    void tearDown() throws Exception {
+        closeable.close();
     }
 
 //    Tests for
@@ -52,20 +63,26 @@ class CustomerRegistrationServiceTest {
         when(customerRepository.selectCustomerByPhoneNumber(testCustomer.getPhoneNumber())).thenReturn(Optional.empty());
         when(customerRepository.save(testCustomer)).thenReturn(testCustomer);
 
-        assertEquals(testCustomer, customerRegistrationService.registerNewCustomer(testCustomer));
+        final Customer registeredCustomer = customerRegistrationService.registerNewCustomer(testCustomer);
+        then(customerRepository).should().selectCustomerByPhoneNumber(phoneNumberCaptor.capture());
+
+        assertEquals(testCustomer, registeredCustomer);
+        assertEquals(testCustomer.getPhoneNumber(), phoneNumberCaptor.getValue());
     }
 
     @Test
     @DisplayName("Inserting an already existing customer, should throw Exception")
-    void insertAlreadyExistingCustomerExpectingExceptionTest() {
+    public void insertAlreadyExistingCustomerExpectingExceptionTest() {
         final Customer testCustomer = getSampleCustomer();
         final String expectedMessage = "You are already registered";
 
         when(customerRepository.selectCustomerByPhoneNumber(testCustomer.getPhoneNumber())).thenReturn(Optional.of(testCustomer));
 
-
         final Exception caughtException = assertThrows(IllegalStateException.class,
                 () -> customerRegistrationService.registerNewCustomer(testCustomer));
+        then(customerRepository).should().selectCustomerByPhoneNumber(phoneNumberCaptor.capture());
+
+        assertEquals(testCustomer.getPhoneNumber(), phoneNumberCaptor.getValue());
         assertEquals(expectedMessage, caughtException.getMessage());
     }
 
@@ -79,6 +96,9 @@ class CustomerRegistrationServiceTest {
         when(customerRepository.selectCustomerByPhoneNumber(newCustomer.getPhoneNumber())).thenReturn(Optional.of(existingCustomer));
 
         final Exception exception = assertThrows(BadRequestException.class, () -> customerRegistrationService.registerNewCustomer(newCustomer));
+        then(customerRepository).should().selectCustomerByPhoneNumber(phoneNumberCaptor.capture());
+
+        assertEquals(newCustomer.getPhoneNumber(), phoneNumberCaptor.getValue());
         assertEquals(expectedMessage, exception.getMessage());
     }
 
