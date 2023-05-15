@@ -42,11 +42,11 @@ After fixing:
 
 | Class             | Bugs       | Vulnerabilities | Code Smells                        |
 |-------------------|------------|-----------------|------------------------------------| 
-| Algorithms        | 0          | 0               | 1 Minor                            |
-| AlphaBetaAdvanced | 0          | 0               | 1 Minor                            |
-| AlphaBetaPruning  | 0          | 0               | 1 Minor                            |
-| Board             | 0          | 0               | 1 Critical<br/>1 Major<br/>2 Minor |
-| Console           | 0          | 0               | 15 Major<br/>1 Minor               |
-| MiniMax           | 0          | 0               | 1 Minor                            |
-| Random            | 1 Critical | 0               | 1 Minor                            |
-| Window            | 0          | 0               | 4 Critical<br/>4 Major<br/>2 Minor |
+| Algorithms        | 0          | 0               | 0 Minor                            |
+| AlphaBetaAdvanced | 0          | 0               | 0 Minor                            |
+| AlphaBetaPruning  | 0          | 0               | 0 Minor                            |
+| Board             | 0          | 0               | 0 Critical<br/>0 Major<br/>0 Minor |
+| Console           | 0          | 0               | 15 Major<br/>0 Minor               |
+| MiniMax           | 0          | 0               | 0 Minor                            |
+| Random            | 0 Critical | 0               | 0 Minor                            |
+| Window            | 0          | 0               | 3 Critical<br/>2 Major<br/>0 Minor |

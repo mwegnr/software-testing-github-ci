@@ -9,8 +9,8 @@ import java.util.Scanner;
  */
 public class Console {
 
-    private Board board;
-    private Scanner sc = new Scanner(System.in);
+    private final Board board;
+    private final Scanner sc = new Scanner(System.in);
 
     /**
      * Construct Console.
@@ -52,7 +52,7 @@ public class Console {
     }
 
     /**
-     * Print out the board and the player who's turn it is.
+     * Print out the board and the player whose turn it is.
      */
     private void printGameStatus () {
         System.out.println("\n" + board + "\n");
