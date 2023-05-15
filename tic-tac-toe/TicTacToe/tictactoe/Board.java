@@ -1,4 +1,4 @@
-package TicTacToe;
+package tictactoe;
 
 import java.util.HashSet;
 
@@ -9,7 +9,7 @@ public class Board {
 
     static final int BOARD_WIDTH = 3;
 
-    public enum State {Blank, X, O}
+    public enum State {BLANK, X, O}
     private State[][] board;
     private State playersTurn;
     private State winner;
@@ -34,7 +34,7 @@ public class Board {
     private void initialize () {
         for (int row = 0; row < BOARD_WIDTH; row++) {
             for (int col = 0; col < BOARD_WIDTH; col++) {
-                board[row][col] = State.Blank;
+                board[row][col] = State.BLANK;
             }
         }
 
@@ -52,7 +52,7 @@ public class Board {
         moveCount = 0;
         gameOver = false;
         playersTurn = State.X;
-        winner = State.Blank;
+        winner = State.BLANK;
         initialize();
     }
 
@@ -77,7 +77,7 @@ public class Board {
             throw new IllegalStateException("TicTacToe is over. No moves can be played.");
         }
 
-        if (board[y][x] == State.Blank) {
+        if (board[y][x] == State.BLANK) {
             board[y][x] = playersTurn;
         } else {
             return false;
@@ -88,7 +88,7 @@ public class Board {
 
         // The game is a draw.
         if (moveCount == BOARD_WIDTH * BOARD_WIDTH) {
-            winner = State.Blank;
+            winner = State.BLANK;
             gameOver = true;
         }
 
@@ -242,7 +242,7 @@ public class Board {
         for (int y = 0; y < BOARD_WIDTH; y++) {
             for (int x = 0; x < BOARD_WIDTH; x++) {
 
-                if (board[y][x] == State.Blank) {
+                if (board[y][x] == State.BLANK) {
                     sb.append("-");
                 } else {
                     sb.append(board[y][x].name());

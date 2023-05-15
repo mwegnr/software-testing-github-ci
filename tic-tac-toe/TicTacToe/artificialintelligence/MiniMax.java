@@ -1,6 +1,6 @@
-package ArtificialIntelligence;
+package artificialintelligence;
 
-import TicTacToe.Board;
+import tictactoe.Board;
 
 /**
  * Uses the MiniMax algorithm to play a move in a game of Tic Tac Toe.
@@ -114,7 +114,7 @@ class MiniMax {
      * @return              the score of the board
      */
     private static int score (Board.State player, Board board) {
-        if (player == Board.State.Blank) {
+        if (player == Board.State.BLANK) {
             throw new IllegalArgumentException("Player must be X or O.");
         }
 

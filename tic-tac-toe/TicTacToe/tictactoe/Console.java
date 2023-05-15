@@ -1,6 +1,6 @@
-package TicTacToe;
+package tictactoe;
 
-import ArtificialIntelligence.Algorithms;
+import artificialintelligence.Algorithms;
 
 import java.util.Scanner;
 
@@ -85,7 +85,7 @@ public class Console {
 
         System.out.println("\n" + board + "\n");
 
-        if (winner == Board.State.Blank) {
+        if (winner == Board.State.BLANK) {
             System.out.println("The TicTacToe is a Draw.");
         } else {
             System.out.println("Player " + winner.toString() + " wins!");

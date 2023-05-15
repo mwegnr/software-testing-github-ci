@@ -1,11 +1,11 @@
-package ArtificialIntelligence;
+package artificialintelligence;
 
-import TicTacToe.Board;
+import tictactoe.Board;
 
 /**
  * Uses the Alpha-Beta Pruning algorithm to play a move in a game of Tic Tac Toe
  * but includes depth in the evaluation function.
- *
+ * <p>
  * The vanilla MiniMax algorithm plays perfectly but it may occasionally
  * decide to make a move that will results in a slower victory or a faster loss.
  * For example, playing the move 0, 1, and then 7 gives the AI the opportunity
@@ -22,15 +22,17 @@ class AlphaBetaAdvanced {
     /**
      * AlphaBetaAdvanced cannot be instantiated.
      */
-    private AlphaBetaAdvanced() {}
+    private AlphaBetaAdvanced() {
+    }
 
     /**
      * Execute the algorithm.
-     * @param player        the player that the AI will identify as
-     * @param board         the Tic Tac Toe board to play on
-     * @param maxPly        the maximum depth
+     *
+     * @param player the player that the AI will identify as
+     * @param board  the Tic Tac Toe board to play on
+     * @param maxPly the maximum depth
      */
-    static void run (Board.State player, Board board, double maxPly) {
+    static void run(Board.State player, Board board, double maxPly) {
 
         if (maxPly < 1) {
             throw new IllegalArgumentException("Maximum depth must be greater than 0.");
@@ -42,14 +44,15 @@ class AlphaBetaAdvanced {
 
     /**
      * The meat of the algorithm.
-     * @param player        the player that the AI will identify as
-     * @param board         the Tic Tac Toe board to play on
-     * @param alpha         the alpha value
-     * @param beta          the beta value
-     * @param currentPly    the current depth
-     * @return              the score of the board
+     *
+     * @param player     the player that the AI will identify as
+     * @param board      the Tic Tac Toe board to play on
+     * @param alpha      the alpha value
+     * @param beta       the beta value
+     * @param currentPly the current depth
+     * @return the score of the board
      */
-    private static int alphaBetaPruning (Board.State player, Board board, double alpha, double beta, int currentPly) {
+    private static int alphaBetaPruning(Board.State player, Board board, double alpha, double beta, int currentPly) {
         if (currentPly++ == maxPly || board.isGameOver()) {
             return score(player, board, currentPly);
         }
@@ -63,14 +66,15 @@ class AlphaBetaAdvanced {
 
     /**
      * Play the move with the highest score.
-     * @param player        the player that the AI will identify as
-     * @param board         the Tic Tac Toe board to play on
-     * @param alpha         the alpha value
-     * @param beta          the beta value
-     * @param currentPly    the current depth
-     * @return              the score of the board
+     *
+     * @param player     the player that the AI will identify as
+     * @param board      the Tic Tac Toe board to play on
+     * @param alpha      the alpha value
+     * @param beta       the beta value
+     * @param currentPly the current depth
+     * @return the score of the board
      */
-    private static int getMax (Board.State player, Board board, double alpha, double beta, int currentPly) {
+    private static int getMax(Board.State player, Board board, double alpha, double beta, int currentPly) {
         int indexOfBestMove = -1;
 
         for (Integer theMove : board.getAvailableMoves()) {
@@ -92,19 +96,20 @@ class AlphaBetaAdvanced {
         if (indexOfBestMove != -1) {
             board.move(indexOfBestMove);
         }
-        return (int)alpha;
+        return (int) alpha;
     }
 
     /**
      * Play the move with the lowest score.
-     * @param player        the player that the AI will identify as
-     * @param board         the Tic Tac Toe board to play on
-     * @param alpha         the alpha value
-     * @param beta          the beta value
-     * @param currentPly    the current depth
-     * @return              the score of the board
+     *
+     * @param player     the player that the AI will identify as
+     * @param board      the Tic Tac Toe board to play on
+     * @param alpha      the alpha value
+     * @param beta       the beta value
+     * @param currentPly the current depth
+     * @return the score of the board
      */
-    private static int getMin (Board.State player, Board board, double alpha, double beta, int currentPly) {
+    private static int getMin(Board.State player, Board board, double alpha, double beta, int currentPly) {
         int indexOfBestMove = -1;
 
         for (Integer theMove : board.getAvailableMoves()) {
@@ -127,19 +132,20 @@ class AlphaBetaAdvanced {
         if (indexOfBestMove != -1) {
             board.move(indexOfBestMove);
         }
-        return (int)beta;
+        return (int) beta;
     }
 
     /**
      * Get the score of the board. Takes depth into account.
-     * @param player        the play that the AI will identify as
-     * @param board         the Tic Tac Toe board to play on
-     * @param currentPly    the current depth
-     * @return              the score of the board
+     *
+     * @param player     the play that the AI will identify as
+     * @param board      the Tic Tac Toe board to play on
+     * @param currentPly the current depth
+     * @return the score of the board
      */
-    private static int score (Board.State player, Board board, int currentPly) {
+    private static int score(Board.State player, Board board, int currentPly) {
 
-        if (player == Board.State.Blank) {
+        if (player == Board.State.BLANK) {
             throw new IllegalArgumentException("Player must be X or O.");
         }
 

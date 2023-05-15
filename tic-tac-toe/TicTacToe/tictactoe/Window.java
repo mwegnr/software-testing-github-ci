@@ -1,4 +1,4 @@
-package TicTacToe;
+package tictactoe;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import ArtificialIntelligence.*;
+import artificialintelligence.*;
 
 public class Window extends JFrame {
 
@@ -193,7 +193,7 @@ public class Window extends JFrame {
 
                 String s;
 
-                if (board.getWinner() == Board.State.Blank) {
+                if (board.getWinner() == Board.State.BLANK) {
                     s = "Draw";
                 } else {
                     s = board.getWinner() + " Wins!";
