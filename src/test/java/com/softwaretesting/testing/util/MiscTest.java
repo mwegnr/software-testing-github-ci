@@ -2,14 +2,27 @@ package com.softwaretesting.testing.util;
 
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class MiscTest {
-
     @Test
-    void miscConstructorTest() {
-        final Misc testMisc = new Misc();
-        assertNotNull(testMisc);
+    void instantiationWithExceptionTest() throws NoSuchMethodException {
+        final String expectedMessage = "Instantiation of utility class is not allowed";
+
+        // prep instantiation via reflection
+        final Constructor<Misc> miscReflectionConstructor
+                = Misc.class.getDeclaredConstructor();
+        miscReflectionConstructor.setAccessible(true);
+
+        // trying this should cause an InvocationTargetException
+        // wrapping the UnsupportedOperationException of the Misc constructor
+        final InvocationTargetException outerException = assertThrows(InvocationTargetException.class, miscReflectionConstructor::newInstance);
+
+        assertEquals(UnsupportedOperationException.class, outerException.getTargetException().getClass());
+        assertEquals(expectedMessage, outerException.getTargetException().getMessage());
     }
 
     @Test
@@ -22,7 +35,7 @@ class MiscTest {
         assertEquals(2, Misc.divide(4, 2));
         /* The following fails because of integer division resulting in float values.
         Not sure if we are supposed to fix such errors.
-        JacoCo won't generate a report if there are failing tests */
+        JaCoCo won't generate a report if there are failing tests */
 //        assertEquals(1.5, Misc.divide(3, 2));
 //        assertEquals(20.02, Misc.divide(1001, 50));
     }
@@ -78,6 +91,11 @@ class MiscTest {
     @Test
     void isPrimeSmallerEqualsTwoTest() {
         assertTrue(Misc.isPrime(2, 1));
+    }
+
+    @Test
+    void isPrimeISquareSmallerNTest() {
+        assertFalse(Misc.isPrime(9, 2));
     }
 
     @Test

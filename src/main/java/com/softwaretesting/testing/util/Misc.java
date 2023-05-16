@@ -4,6 +4,10 @@ import org.springframework.util.Assert;
 
 
 public class Misc {
+    private Misc() {
+        throw new UnsupportedOperationException("Instantiation of utility class is not allowed");
+    }
+
     enum Color {
         RED,
         YELLOW,
@@ -29,7 +33,8 @@ public class Misc {
             case RED:
                 /* fallthrough */
             case YELLOW:
-            case BLUE: return true;
+            case BLUE:
+                return true;
         }
 
         return false;
@@ -38,8 +43,7 @@ public class Misc {
     public static long calculateFactorial(int num) {
         if (num >= 1) {
             return num * calculateFactorial(num - 1);
-        }
-        else {
+        } else {
             return 1;
         }
     }
