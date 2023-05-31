@@ -9,7 +9,7 @@ Initial:
 | CustomerManagementServiceTest   | 0    | 0               | 4 Major<br/> 12 Info |
 | CustomerRegistrationServiceTest | 0    | 0               | 3 Info               |
 | CustomerRepositoryTest          | 0    | 0               | 10 Info              |
-| MiscTest                        | 0    | 0               | 1 Blocker            | `
+| MiscTest                        | 0    | 0               | 1 Blocker            |
 | PhoneNumberValidatorTest        | 0    | 0               | 9 Info               | 
 
 After fixing:
@@ -19,7 +19,7 @@ After fixing:
 | CustomerManagementServiceTest   | 0    | 0               | 0 Major<br/>0 Info |
 | CustomerRegistrationServiceTest | 0    | 0               | 0 Info             |
 | CustomerRepositoryTest          | 0    | 0               | 0 Info             |
-| MiscTest                        | 0    | 0               | 0 Blocker          | `
+| MiscTest                        | 0    | 0               | 0 Blocker          |
 | PhoneNumberValidatorTest        | 0    | 0               | 0 Info             | 
 
 ## FOSS Project: Tic Tac Toe Game
