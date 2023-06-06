@@ -186,8 +186,8 @@ class CustomerManagementControllerTest {
     }
 
     @Test
-    @DisplayName("Test not found list GET-Method")
-    void unavailableListMethodTest() throws Exception {
+    @DisplayName("Test list GET-Method")
+    void getListTest() throws Exception {
         // TODO: check response body somehow
         mockMvc.perform(get(endpoint_base + "/list"))
                 .andExpect(status().isOk())
