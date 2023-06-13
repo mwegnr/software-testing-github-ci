@@ -662,8 +662,8 @@
             "uid": "d122bf8e-87a1-4003-8961-52beeb03fdbf"
           },
           "editorMode": "code",
-          "expr": "sum(rate(http_server_requests_seconds_count{status=~\"5..\"}[1m]))",
-          "legendFormat": "Status 5xx",
+          "expr": "rate(http_server_requests_seconds_count{status=~\"5..\"}[1m])",
+          "legendFormat": "{{status}}",
           "range": true,
           "refId": "A"
         },
@@ -673,9 +673,9 @@
             "uid": "d122bf8e-87a1-4003-8961-52beeb03fdbf"
           },
           "editorMode": "code",
-          "expr": "sum(rate(http_server_requests_seconds_count{status=~\"4..\"}[1m]))",
+          "expr": "rate(http_server_requests_seconds_count{status=~\"4..\"}[1m])",
           "hide": false,
-          "legendFormat": "Status 4xx",
+          "legendFormat": "{{status}}",
           "range": true,
           "refId": "B"
         },
@@ -795,37 +795,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "stepAfter",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "mode": "thresholds"
           },
           "mappings": [],
           "thresholds": {
@@ -853,19 +823,19 @@
       },
       "id": 2,
       "options": {
-        "legend": {
+        "displayMode": "gradient",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "horizontal",
+        "reduceOptions": {
           "calcs": [
-            "last",
-            "count"
+            "lastNotNull"
           ],
-          "displayMode": "table",
-          "placement": "right",
-          "showLegend": true
+          "fields": "",
+          "values": false
         },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
+        "showUnfilled": true,
+        "valueMode": "color"
       },
       "pluginVersion": "9.5.3",
       "targets": [
@@ -882,7 +852,7 @@
         }
       ],
       "title": "Request Count",
-      "type": "timeseries"
+      "type": "bargauge"
     },
     {
       "datasource": {
@@ -923,7 +893,7 @@
         "displayMode": "gradient",
         "minVizHeight": 10,
         "minVizWidth": 0,
-        "orientation": "auto",
+        "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -932,6 +902,9 @@
           "values": false
         },
         "showUnfilled": true,
+        "text": {
+          "titleSize": 10
+        },
         "valueMode": "color"
       },
       "pluginVersion": "9.5.3",
@@ -967,6 +940,6 @@
   "timezone": "",
   "title": "Software Testing",
   "uid": "b7734d58-f90f-46e8-a256-88f40e82235e",
-  "version": 23,
+  "version": 25,
   "weekStart": ""
 }
