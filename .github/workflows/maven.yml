@@ -32,11 +32,22 @@ jobs:
     - name: Test with Maven
       run: mvn test
       
-    - name: jacoco
+    - name: JaCoCo 
       run: mvn org.jacoco:jacoco-maven-plugin:prepare-agent test jacoco:report
 
-    - name: Archive code coverage results
+    - name: Mutation Testing (PIT)
+      run: mvn test-compile org.pitest:pitest-maven:mutationCoverage
+      
+    - name: Publish report (JaCoCo)
       uses: actions/upload-artifact@v3
       with:
         name: code-coverage-report
         path: target/site
+      
+    - name: Publish report (PIT)
+      uses: actions/upload-artifact@v3
+      with:
+        name: code-coverage-report
+        path: target/pit-reports/
+      
+      
