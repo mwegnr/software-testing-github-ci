@@ -31,3 +31,6 @@ jobs:
 
     - name: Test with Maven
       run: mvn test
+      
+    - name: jacoco
+      run: mvn org.jacoco:jacoco-maven-plugin:prepare-agent test jacoco:report
