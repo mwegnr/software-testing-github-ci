@@ -47,7 +47,7 @@ jobs:
     - name: Publish report (PIT)
       uses: actions/upload-artifact@v3
       with:
-        name: code-coverage-report
+        name: mutation-testing-report
         path: target/pit-reports/
       
       
